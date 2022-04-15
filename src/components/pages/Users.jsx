@@ -1,15 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
 
 import { SearchInput } from "../molecules/SearchInput";
 import { UserCard } from "../organisms/user/UserCard";
+import { useRecoilState } from "recoil";
+import { userState } from "../../store/userState";
+import { SecondaryButton } from "../atoms/button/SecondaryButton";
 
 const users = [...Array(10).keys()].map((val) => {
   return {
     id: val,
     name: `じゃけぇ-${val}`,
-    image: "https://source.unsplash.com/Mv9hjnEUHR4",
+    src: "https://source.unsplash.com/Mv9hjnEUHR4",
     email: "1234@bbb.com",
     phone: "090-0000-1111",
     company: {
@@ -20,17 +22,19 @@ const users = [...Array(10).keys()].map((val) => {
 });
 
 export const Users = () => {
-  const { state } = useLocation();
-  const isAdmin = state ? state.isAdmin : false;
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
-  console.log(state);
+  const onClickSwitch = () => setUserInfo({ isAdmin: !userInfo.isAdmin });
+
   return (
     <SContainer>
       <h2>ユーザー一覧</h2>
       <SearchInput />
+      <br />
+      <SecondaryButton onClick={onClickSwitch}>切り替え</SecondaryButton>
       <SUserArea>
         {users.map((user) => (
-          <UserCard key={user.id} user={user} isAdmin={isAdmin} />
+          <UserCard key={user.id} user={user} />
         ))}
       </SUserArea>
     </SContainer>

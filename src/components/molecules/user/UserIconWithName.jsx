@@ -1,11 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+
+import { userState } from "../../../store/userState";
 
 export const UserIconWithName = (props) => {
-  const { image, name, isAdmin } = props;
+  const { src, name } = props;
+  const userInfo = useRecoilValue(userState);
+  const isAdmin = userInfo ? userInfo.isAdmin : false;
+
   return (
     <SContainer>
-      <SImage height={160} width={160} src={image} alt={name} />
+      <SImage height={160} width={160} alt="プロフィール写真" src={src} />
       <SName>{name}</SName>
       {isAdmin && <SEdit>編集</SEdit>}
     </SContainer>
